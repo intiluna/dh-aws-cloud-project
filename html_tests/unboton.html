@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mostrar Anuncios</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<h1>Mostrar Anuncios</h1>
+
+<button id="mostrarAnunciosBtn">Mostrar Anuncios</button>
+
+<div id="anunciosContainer">
+  <!-- se deberia de mostrar los anuncios -->
+</div>
+
+<script>
+$(document).ready(function() {
+  $('#mostrarAnunciosBtn').click(function() {
+    $.get('https://gj9dxrxa2e.execute-api.us-east-1.amazonaws.com/anuncios', function(data) {
+      var anunciosHTML = '';
+      if (data && data.length > 0) {
+        data.forEach(function(anuncio) {
+          anunciosHTML += '<div>';
+          anunciosHTML += '<p>ID del Anuncio: ' + anuncio.anuncioId + '</p>';
+          anunciosHTML += '<p>Título: ' + anuncio.titulo + '</p>';
+          anunciosHTML += '</div>';
+        });
+      } else {
+        anunciosHTML = '<p>No se encontraron anuncios.</p>';
+      }
+      $('#anunciosContainer').html(anunciosHTML);
+    }).fail(function() {
+      $('#anunciosContainer').html('<p>error al cargar los anuncios.</p>');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
+
