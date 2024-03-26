@@ -1,0 +1,21 @@
+titulo,anuncioId,precio,email
+"Don Quijote de la Mancha",001,15.99,example1@example.com
+"Cien años de soledad",002,12.50,example2@example.com
+"El amor en los tiempos del cólera",003,10.75,example3@example.com
+"La sombra del viento",004,9.99,example4@example.com
+"Crónica de una muerte anunciada",005,11.25,example5@example.com
+"El laberinto de los espíritus",006,8.99,example6@example.com
+"La casa de los espíritus",007,13.50,example7@example.com
+"Rayuela",008,7.99,example8@example.com
+"El perfume: historia de un asesino",009,18.25,example9@example.com
+"Los renglones torcidos de Dios",010,9.50,example10@example.com
+"La ciudad y los perros",011,20.99,example11@example.com
+"La fiesta del chivo",012,9.25,example12@example.com
+"La historia interminable",013,11.75,example13@example.com
+"La sombra del viento",014,10.99,example14@example.com
+"La hoguera de las vanidades",015,14.25,example15@example.com
+"El túnel",016,8.75,example16@example.com
+"Los juegos del hambre",017,11.99,example17@example.com
+"El prisionero del cielo",018,9.50,example18@example.com
+"La elegancia del erizo",019,8.25,example19@example.com
+"Memorias de una geisha",020,10.50,example20@example.com

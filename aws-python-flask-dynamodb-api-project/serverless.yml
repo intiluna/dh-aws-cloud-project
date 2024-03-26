@@ -1,0 +1,61 @@
+org: intiluna
+app: dh-geopython
+service: aws-python-flask-dynamodb-api-project
+
+frameworkVersion: '3'
+
+custom:
+  tableName: 'anuncios-table-${sls:stage}'
+  wsgi:
+    app: app.app
+  # scripts:
+  #   hooks:
+  #     after:deploy:finalize: "python3 preload_db.py"
+
+provider:
+  name: aws
+  runtime: python3.9
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ AnunciosTable, Arn ]
+  environment:
+    ANUNCIOS_TABLE: ${self:custom.tableName}
+
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+  - serverless-plugin-scripts
+
+resources:
+  Resources:
+    AnunciosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: anuncioId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: anuncioId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}
+
+
