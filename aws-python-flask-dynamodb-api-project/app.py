@@ -1,6 +1,6 @@
 import os
 import boto3
-from flask import Flask, jsonify, make_response, request
+from flask import Flask, jsonify, make_response, request, render_template
 
 app = Flask(__name__)
 
@@ -15,6 +15,9 @@ if os.environ.get('IS_OFFLINE'):
 
 ANUNCIOS_TABLE = os.environ['ANUNCIOS_TABLE']
 
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/anuncios/<string:anuncio_id>')
 def get_anuncio_detalle(anuncio_id):
@@ -64,7 +67,8 @@ def get_list_anuncios():
             }
             anuncios.append(anuncio)
 
-        return jsonify(anuncios), 200
+        #return jsonify(anuncios), 200
+        return render_template('anuncios.html', anuncios=anuncios), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
