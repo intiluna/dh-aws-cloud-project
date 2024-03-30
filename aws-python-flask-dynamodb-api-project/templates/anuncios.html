@@ -19,11 +19,17 @@
         th {
             background-color: #f2f2f2;
         }
+
+        /* Agregamos un estilo para hacer que las filas sean seleccionables */
+        tr:hover {
+            cursor: pointer;
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 <body>
     <h1>Anuncios</h1>
-    <table>
+    <table id="tabla-anuncios">
         <thead>
             <tr>
                 <th>Anuncio ID</th>
@@ -32,12 +38,28 @@
         </thead>
         <tbody>
             {% for anuncio in anuncios %}
-            <tr>
+            <tr data-anuncio-id="{{ anuncio.anuncioId }}">
                 <td>{{ anuncio.anuncioId }}</td>
                 <td>{{ anuncio.titulo }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+    <a href="/"><button>Ver Anuncios</button></a>
+
+    <!-- Agregamos un script para manejar el evento de clic en las filas de la tabla -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tabla = document.getElementById('tabla-anuncios');
+            tabla.addEventListener('click', function(event) {
+                var fila = event.target.closest('tr');
+                if (fila) {
+                    var anuncioId = fila.getAttribute('data-anuncio-id');
+                    if (anuncioId) {
+                        window.location.href = '/anuncios/' + anuncioId;  // Corregimos la ruta de redirección
+                    }
+                }
+            });
+        });
+    </script>
 </body>
-</html>
