@@ -19,6 +19,12 @@ ANUNCIOS_TABLE = os.environ['ANUNCIOS_TABLE']
 def index():
     return render_template('index.html')
 
+@app.route('/nuevo-anuncio')
+def mostrar_formulario_nuevo_anuncio():
+    return render_template('anuncio_nuevo.html')
+
+
+
 @app.route('/anuncios/<string:anuncio_id>')
 def get_anuncio_detalle(anuncio_id):
     result = dynamodb_client.get_item(
@@ -42,7 +48,7 @@ def get_anuncio_detalle(anuncio_id):
     return render_template('detalle_anuncio.html', libro=anuncio)
 
 
-@app.route('/anuncios', methods=['POST'])
+@app.route('/anuncio-nuevo', methods=['POST'])
 def create_anuncio():
     anuncio_id = request.json.get('anuncioId')
     titulo = request.json.get('titulo')

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Anuncio</title>
+</head>
+<body>
+    <h1>Nuevo Anuncio</h1>
+    <form id="formulario-anuncio">
+        <label for="anuncioId">ID de Anuncio:</label><br>
+        <input type="text" id="anuncioId" name="anuncioId"><br><br>
+        <label for="titulo">Título:</label><br>
+        <input type="text" id="titulo" name="titulo"><br><br>
+        <label for="precio">Precio:</label><br>
+        <input type="text" id="precio" name="precio"><br><br>
+        <label for="email">Email de contacto:</label><br>
+        <input type="text" id="email" name="email"><br><br>
+        <button type="button" onclick="crearAnuncio()">Crear Anuncio</button>
+        <button type="button" onclick="resetForm()">Reset</button>
+        <a href="/"><button type="button">Inicio</button></a>
+    </form>
+
+    <script>
+        function crearAnuncio() {
+            var formulario = document.getElementById("formulario-anuncio");
+            var datosAnuncio = {
+                anuncioId: formulario.anuncioId.value,
+                titulo: formulario.titulo.value,
+                precio: formulario.precio.value,
+                email: formulario.email.value
+            };
+
+            // Realizamos la solicitud AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/anuncio-nuevo");
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(JSON.stringify(datosAnuncio));
+
+            // Limpiamos el formulario después de enviar los datos
+            resetForm();
+        }
+
+        function resetForm() {
+            var formulario = document.getElementById("formulario-anuncio");
+            formulario.anuncioId.value = "";
+            formulario.titulo.value = "";
+            formulario.precio.value = "";
+            formulario.email.value = "";
+        }
+    </script>
+</body>
+</html>

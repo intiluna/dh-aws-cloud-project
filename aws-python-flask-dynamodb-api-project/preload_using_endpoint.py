@@ -4,7 +4,7 @@ import csv
 
 def upload_records_to_endpoint(endpoint_url):
     # Read records from CSV file
-    endpoint_url = endpoint_url + '/anuncios'
+    endpoint_url = endpoint_url + '/anuncio-nuevo'
     print(endpoint_url)
     with open('records_to_populate_db.csv', 'r') as file:
         reader = csv.DictReader(file)
