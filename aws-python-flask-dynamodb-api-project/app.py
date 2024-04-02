@@ -1,5 +1,6 @@
 import os
 import boto3
+# import requests
 from flask import Flask, jsonify, make_response, request, render_template
 
 app = Flask(__name__)
@@ -34,10 +35,6 @@ def get_anuncio_detalle(anuncio_id):
     if not item:
         return jsonify({'error': 'No pude encontrar anuncio con ese "anuncioID"'}), 404
 
-    # return jsonify(
-    #     {'anuncioID': item.get('anuncioId').get('S'), 'titulo': item.get('titulo').get('S'), 'precio': item.get('precio').get('S'),'email': item.get('email').get('S')}
-    # )
-
     anuncio = {
         'anuncioId': item.get('anuncioId').get('S'),
         'titulo': item.get('titulo').get('S'),
@@ -46,6 +43,12 @@ def get_anuncio_detalle(anuncio_id):
     }
 
     return render_template('detalle_anuncio.html', libro=anuncio)
+
+
+
+
+
+    
 
 
 @app.route('/anuncio-nuevo', methods=['POST'])

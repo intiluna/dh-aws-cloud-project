@@ -21,6 +21,9 @@
         <a href="/"><button type="button">Inicio</button></a>
     </form>
 
+    <!-- Agregar un párrafo para mostrar el mensaje -->
+    <p id="mensaje"></p>
+
     <script>
         function crearAnuncio() {
             var formulario = document.getElementById("formulario-anuncio");
@@ -31,14 +34,32 @@
                 email: formulario.email.value
             };
 
-            // Realizamos la solicitud AJAX
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/anuncio-nuevo");
-            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xhr.send(JSON.stringify(datosAnuncio));
-
-            // Limpiamos el formulario después de enviar los datos
-            resetForm();
+            // Realizamos la solicitud fetch
+            fetch('/anuncio-nuevo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datosAnuncio)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al crear el anuncio');
+                }
+                // Limpiamos el formulario después de enviar los datos
+                resetForm();
+                // Mostrar mensaje de "Anuncio creado"
+                document.getElementById("mensaje").innerText = "Anuncio creado";
+                // Redireccionar a la página de anuncios después de un breve retraso
+                setTimeout(() => {
+                    window.location.href = '/anuncios';
+                }, 2000); // Redireccionar después de 2 segundos
+                // Opcional: Redireccionar a otra página después de crear el anuncio
+                // window.location.href = '/otra-pagina';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
         function resetForm() {
