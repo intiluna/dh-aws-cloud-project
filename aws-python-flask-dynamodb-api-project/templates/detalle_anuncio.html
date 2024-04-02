@@ -21,6 +21,15 @@
     
     <!-- Espacio para mensaje -->
     <div id="mensaje"></div>
+
+    <!-- Espacio para mensajes del chat -->
+    <div id="simple-chat-messages"></div>
+
+    <!-- Formulario para escribir un nuevo mensaje -->
+    <div>
+        <input type="text" id="newMessage" placeholder="Escribe un nuevo mensaje...">
+        <button onclick="enviarMensaje()">Enviar</button>
+    </div>
     
 
     <!-- Botones -->
@@ -64,6 +73,53 @@
                 // Manejar errores si la solicitud falla
             });
         }
+        // Función para cargar los mensajes del chat
+        function cargarMensajes() {
+            fetch(`/chat/{{ libro.anuncioId }}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 200) {
+                    const messagesDiv = document.getElementById('simple-chat-messages');
+                    messagesDiv.innerHTML = ''; // Limpiar los mensajes anteriores
+                    data.messages.forEach(message => {
+                        const messageElement = document.createElement('div');
+                        messageElement.innerText = `[${message.ts}] ${message.user_id}: ${message.text}`;
+                        messagesDiv.appendChild(messageElement);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Llamar a la función para cargar los mensajes cuando se carga la página
+        cargarMensajes();
+
+        function enviarMensaje() {
+            const newMessage = document.getElementById('newMessage').value;
+            const messageData = {
+                "user_id": "1", // Mantenemos el usuario como 1 por ahora
+                "text": newMessage
+            };
+
+            fetch(`/chat/{{ libro.anuncioId }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(messageData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 201) {
+                    cargarMensajes(); // Recargar mensajes después de enviar uno nuevo
+                    document.getElementById('newMessage').value = ''; // Limpiar el campo de texto
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        
     </script>
 
 </body>
