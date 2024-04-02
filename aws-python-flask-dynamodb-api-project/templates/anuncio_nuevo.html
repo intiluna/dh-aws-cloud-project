@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Anuncio</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+
 </head>
 <body>
-    <h1>Nuevo Anuncio</h1>
+    
+    <header>
+        <h1>Crear Anuncio</h1>
+    </header>
+
     <form id="formulario-anuncio">
         <label for="anuncioId">ID de Anuncio:</label><br>
         <input type="text" id="anuncioId" name="anuncioId"><br><br>
@@ -54,8 +60,7 @@
                 setTimeout(() => {
                     window.location.href = '/anuncios';
                 }, 2000); // Redireccionar después de 2 segundos
-                // Opcional: Redireccionar a otra página después de crear el anuncio
-                // window.location.href = '/otra-pagina';
+            
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -71,4 +76,9 @@
         }
     </script>
 </body>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Inti Luna.</p>
+    </footer>
 </html>

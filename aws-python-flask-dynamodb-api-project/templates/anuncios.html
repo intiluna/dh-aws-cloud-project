@@ -4,31 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anuncios</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        /* Agregamos un estilo para hacer que las filas sean seleccionables */
-        tr:hover {
-            cursor: pointer;
-            background-color: #f5f5f5;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+    
 </head>
 <body>
-    <h1>Anuncios</h1>
+    <header>
+        <h1>Anuncios</h1>
+    </header>
+    
     <table id="tabla-anuncios">
         <thead>
             <tr>
@@ -45,7 +28,12 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="/"><button>Inicio</button></a>
+    <div>
+        <a href="/"><button class="button">Inicio</button></a>
+        <a href="/nuevo-anuncio"><button class="button">Publicar anuncio</button></a>
+    
+    </div>
+    
 
     <!-- Agregamos un script para manejar el evento de clic en las filas de la tabla -->
     <script>
@@ -63,3 +51,10 @@
         });
     </script>
 </body>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Inti Luna.</p>
+    </footer>
+
+</html>

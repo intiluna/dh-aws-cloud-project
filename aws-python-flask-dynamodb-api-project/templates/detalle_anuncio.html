@@ -3,17 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Libro</title>
+    <title>Detalle de Anuncio</title>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
 </head>
 <body>
-    <h1>Detalle de Libro</h1>
+    
+    <header>
+        <h1>Detalle de anuncio</h1>
+    </header>
+    
     <div>
         <h2>{{ libro.titulo }}</h2>
         <p><strong>ID de Anuncio:</strong> {{ libro.anuncioId }}</p>
         <p><strong>Precio:</strong> {{ libro.precio }}</p>
         <p><strong>Email de contacto:</strong> {{ libro.email }}</p>
-        
     </div>
-    <a href="/anuncios"><button>Ver Anuncios</button></a>
+    
+    <!-- Espacio para mensaje -->
+    <div id="mensaje"></div>
+    
+
+    <!-- Botones -->
+    <div>
+        <a href="/anuncios"><button class="button">Ver anuncios</button></a>
+        <a href="/nuevo-anuncio"><button class="button">Nuevo anuncio</button></a>
+        <button onclick="eliminarAnuncio('{{ libro.anuncioId }}')" class="button button-delete">Eliminar anuncio</button>
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Inti Luna.</p>
+    </footer>
+
+    <script>
+        function eliminarAnuncio(anuncioId) {
+            fetch(`/anuncios/${anuncioId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el anuncio');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Mostrar mensaje de éxito
+                const mensaje = document.getElementById('mensaje');
+                mensaje.innerHTML = `El anuncio con ID ${anuncioId} se ha borrado exitosamente.`;
+                // Redirigir a la página de anuncios después de un breve retraso
+                setTimeout(() => {
+                    window.location.href = '/anuncios';
+                }, 2000); // 2 segundos de retraso antes de redirigir
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Manejar errores si la solicitud falla
+            });
+        }
+    </script>
+
 </body>
 </html>

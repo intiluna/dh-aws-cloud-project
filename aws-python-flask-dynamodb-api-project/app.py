@@ -20,12 +20,13 @@ ANUNCIOS_TABLE = os.environ['ANUNCIOS_TABLE']
 def index():
     return render_template('index.html')
 
+# vista para mostrar formulario de nuevo anuncio
 @app.route('/nuevo-anuncio')
 def mostrar_formulario_nuevo_anuncio():
     return render_template('anuncio_nuevo.html')
 
 
-
+# Endpoint de vista de detalle de anuncio
 @app.route('/anuncios/<string:anuncio_id>')
 def get_anuncio_detalle(anuncio_id):
     result = dynamodb_client.get_item(
@@ -45,12 +46,25 @@ def get_anuncio_detalle(anuncio_id):
     return render_template('detalle_anuncio.html', libro=anuncio)
 
 
+# Endpoint para eliminar un anuncio por su ID
+@app.route('/anuncios/<string:anuncio_id>', methods=['DELETE'])
+def delete_anuncio(anuncio_id):
+    # Primero, verifica si el anuncio existe
+    result = dynamodb_client.get_item(
+        TableName=ANUNCIOS_TABLE, Key={'anuncioId': {'S': anuncio_id}}
+    )
+    item = result.get('Item')
+    if not item:
+        return jsonify({'error': 'No pude encontrar anuncio con ese "anuncioID"'}), 404
 
+    # Si el anuncio existe, procede a eliminarlo
+    dynamodb_client.delete_item(
+        TableName=ANUNCIOS_TABLE, Key={'anuncioId': {'S': anuncio_id}}
+    )
 
+    return jsonify({f'message': 'Anuncio {anuncio_id} eliminado exitosamente'}), 200   
 
-    
-
-
+# Crear nuevo anuncio
 @app.route('/anuncio-nuevo', methods=['POST'])
 def create_anuncio():
     anuncio_id = request.json.get('anuncioId')
@@ -67,6 +81,7 @@ def create_anuncio():
     return jsonify({'anuncioId': anuncio_id, 'titulo': titulo}),200
 
 
+# Listar anuncios
 @app.route('/anuncios', methods=['GET'])
 def get_list_anuncios():
     try:
@@ -75,7 +90,8 @@ def get_list_anuncios():
         )
         items = response.get('Items', [])
         if not items:
-            return jsonify({'message': 'No users found in the table'}), 404
+            #return jsonify({'message': 'No hay anuncios en la tabla'}), 404
+            return render_template('no_hay_anuncios.html'), 400
 
         anuncios = []
         for item in items:
