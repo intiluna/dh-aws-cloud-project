@@ -27,14 +27,16 @@
                     "AnunciosTable",
                     "Arn"
                   ]
-                }
+                },
+                "arn:aws:dynamodb:eu-west-1:*:table/simple-chat-messages"
               ]
             }
           ]
         }
       },
       "environment": {
-        "ANUNCIOS_TABLE": "anuncios-table-dev"
+        "ANUNCIOS_TABLE": "anuncios-table-dev",
+        "DYNAMODB_MESSAGES_TABLE": "simple-chat-messages"
       },
       "stage": "dev",
       "versionFunctions": true,
@@ -115,6 +117,18 @@
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
               "LogGroupName": "/aws/lambda/aws-python-flask-dynamodb-api-project-dev-api"
+            }
+          },
+          "GetUnderscoremessagesLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/aws-python-flask-dynamodb-api-project-dev-get_messages"
+            }
+          },
+          "SendUnderscoremessageLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/aws-python-flask-dynamodb-api-project-dev-send_message"
             }
           },
           "IamRoleLambdaExecution": {
@@ -235,6 +249,18 @@
                               "ApiLogGroup",
                               "Arn"
                             ]
+                          },
+                          {
+                            "Fn::GetAtt": [
+                              "GetUnderscoremessagesLogGroup",
+                              "Arn"
+                            ]
+                          },
+                          {
+                            "Fn::GetAtt": [
+                              "SendUnderscoremessageLogGroup",
+                              "Arn"
+                            ]
                           }
                         ]
                       }
@@ -251,7 +277,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712056231662-2024-04-02T11:10:31.662Z/aws-python-flask-dynamodb-api-project.zip"
+                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712062571050-2024-04-02T12:56:11.050Z/aws-python-flask-dynamodb-api-project.zip"
               },
               "Handler": "wsgi_handler.handler",
               "Runtime": "python3.9",
@@ -260,7 +286,8 @@
               "Timeout": 6,
               "Environment": {
                 "Variables": {
-                  "ANUNCIOS_TABLE": "anuncios-table-dev"
+                  "ANUNCIOS_TABLE": "anuncios-table-dev",
+                  "DYNAMODB_MESSAGES_TABLE": "simple-chat-messages"
                 }
               },
               "Role": {
@@ -274,15 +301,451 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionDmvOdLs9ya3ifXSYqol7af19rwcNygneIUZ2bO0tA": {
+          "GetUnderscoremessagesLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712062571050-2024-04-02T12:56:11.050Z/aws-python-flask-dynamodb-api-project.zip"
+              },
+              "Handler": "handler.get_messages",
+              "Runtime": "python3.9",
+              "FunctionName": "aws-python-flask-dynamodb-api-project-dev-get_messages",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "ANUNCIOS_TABLE": "anuncios-table-dev",
+                  "DYNAMODB_MESSAGES_TABLE": "simple-chat-messages"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "GetUnderscoremessagesLogGroup"
+            ]
+          },
+          "SendUnderscoremessageLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712062571050-2024-04-02T12:56:11.050Z/aws-python-flask-dynamodb-api-project.zip"
+              },
+              "Handler": "handler.send_message",
+              "Runtime": "python3.9",
+              "FunctionName": "aws-python-flask-dynamodb-api-project-dev-send_message",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "ANUNCIOS_TABLE": "anuncios-table-dev",
+                  "DYNAMODB_MESSAGES_TABLE": "simple-chat-messages"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "SendUnderscoremessageLogGroup"
+            ]
+          },
+          "ApiLambdaVersionUFC4CuIzsQwpGI0a6hbne5ytdGxNtmXSQSuh6xQG7A": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "sPNxZV71y3fYBN/84mCskRXVyYAV6PqdzouvpP5llQ0="
+              "CodeSha256": "/yXSrPIxeXTh0GTymvB/a0nypW8Eo4BACJ4Acf/P6Eg="
             }
+          },
+          "GetUnderscoremessagesLambdaVersionPR4HObQegDDuv2VMIN3m7oybJhZs8iSKseOs1ZAI0Q": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GetUnderscoremessagesLambdaFunction"
+              },
+              "CodeSha256": "/yXSrPIxeXTh0GTymvB/a0nypW8Eo4BACJ4Acf/P6Eg="
+            }
+          },
+          "SendUnderscoremessageLambdaVersion0ns7be7btHwFrQLjbFFyhlZyRrxDsOQHV0tf8gXwU": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SendUnderscoremessageLambdaFunction"
+              },
+              "CodeSha256": "/yXSrPIxeXTh0GTymvB/a0nypW8Eo4BACJ4Acf/P6Eg="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-aws-python-flask-dynamodb-api-project",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceChatidVar": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "{chat_id}",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodChatidVarGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {
+                "method.request.path.chat_id": true
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceChatidVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GetUnderscoremessagesLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": [],
+              "RequestValidatorId": {
+                "Ref": "ApiGatewayAwspythonflaskdynamodbapiprojectRequestValidator"
+              }
+            },
+            "DependsOn": [
+              "GetUnderscoremessagesLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodChatidVarPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {
+                "method.request.path.chat_id": true
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceChatidVar"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "SendUnderscoremessageLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": [],
+              "RequestValidatorId": {
+                "Ref": "ApiGatewayAwspythonflaskdynamodbapiprojectRequestValidator"
+              }
+            },
+            "DependsOn": [
+              "SendUnderscoremessageLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayAwspythonflaskdynamodbapiprojectRequestValidator": {
+            "Type": "AWS::ApiGateway::RequestValidator",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ValidateRequestBody": true,
+              "ValidateRequestParameters": true,
+              "Name": "aws-python-flask-dynamodb-api-project-dev | Validate request body and querystring parameters"
+            }
+          },
+          "ApiGatewayDeployment1712062563700": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodChatidVarGet",
+              "ApiGatewayMethodChatidVarPost"
+            ]
+          },
+          "GetUnderscoremessagesLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GetUnderscoremessagesLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "SendUnderscoremessageLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SendUnderscoremessageLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ApiGatewayLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/api-gateway/aws-python-flask-dynamodb-api-project-dev"
+            }
+          },
+          "CustomApiGatewayAccountCloudWatchRole": {
+            "Type": "Custom::ApiGatewayAccountRole",
+            "Version": 1,
+            "Properties": {
+              "ServiceToken": {
+                "Fn::GetAtt": [
+                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
+                  "Arn"
+                ]
+              }
+            }
+          },
+          "IamRoleCustomResourcesLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "dev",
+                        "aws-python-flask-dynamodb-api-project",
+                        "custom-resources-lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "iam:",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "role/*"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "iam:AttachRolePolicy",
+                          "iam:CreateRole",
+                          "iam:ListAttachedRolePolicies",
+                          "iam:PassRole"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "apigateway:*::/account"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "apigateway:GET",
+                          "apigateway:PATCH"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712062571050-2024-04-02T12:56:11.050Z/custom-resources.zip"
+              },
+              "FunctionName": "aws-python-flask-dynamodb-api-prfe324225760bd9762b645326b16fb766",
+              "Handler": "api-gateway-cloud-watch-role/handler.handler",
+              "MemorySize": 1024,
+              "Runtime": "nodejs16.x",
+              "Timeout": 180,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleCustomResourcesLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "IamRoleCustomResourcesLambdaExecution"
+            ]
           },
           "HttpApi": {
             "Type": "AWS::ApiGatewayV2::Api",
@@ -413,6 +876,33 @@
               },
               "TableName": "anuncios-table-dev"
             }
+          },
+          "DynamoChatsMessagesTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "simple-chat-messages",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "chat_id",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "ts",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "chat_id",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "ts",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
           }
         },
         "Outputs": {
@@ -438,10 +928,54 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionDmvOdLs9ya3ifXSYqol7af19rwcNygneIUZ2bO0tA"
+              "Ref": "ApiLambdaVersionUFC4CuIzsQwpGI0a6hbne5ytdGxNtmXSQSuh6xQG7A"
             },
             "Export": {
               "Name": "sls-aws-python-flask-dynamodb-api-project-dev-ApiLambdaFunctionQualifiedArn"
+            }
+          },
+          "GetUnderscoremessagesLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GetUnderscoremessagesLambdaVersionPR4HObQegDDuv2VMIN3m7oybJhZs8iSKseOs1ZAI0Q"
+            },
+            "Export": {
+              "Name": "sls-aws-python-flask-dynamodb-api-project-dev-GetUnderscoremessagesLambdaFunctionQualifiedArn"
+            }
+          },
+          "SendUnderscoremessageLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SendUnderscoremessageLambdaVersion0ns7be7btHwFrQLjbFFyhlZyRrxDsOQHV0tf8gXwU"
+            },
+            "Export": {
+              "Name": "sls-aws-python-flask-dynamodb-api-project-dev-SendUnderscoremessageLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-aws-python-flask-dynamodb-api-project-dev-ServiceEndpoint"
             }
           },
           "HttpApiId": {
@@ -563,6 +1097,9 @@
         }
       },
       "logs": {
+        "restApi": {
+          "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourceId\":\"$context.resourceId\",\"resourcePath\":\"$context.resourcePath\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"status\":\"$context.status\",\"authLatency\":\"$context.authorizer.integrationLatency\",\"integrationLatency\":\"$context.integrationLatency\",\"integrationStatus\":\"$context.integrationStatus\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_ACCESS_LOG\",\"version\":\"1.0.0\"}"
+        },
         "httpApi": {
           "format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"apiId\":\"$context.apiId\",\"resourcePath\":\"$context.routeKey\",\"path\":\"$context.path\",\"httpMethod\":\"$context.httpMethod\",\"stage\":\"$context.stage\",\"status\":\"$context.status\",\"integrationStatus\":\"$context.integrationStatus\",\"integrationLatency\":\"$context.integrationLatency\",\"responseLatency\":\"$context.responseLatency\",\"responseLength\":\"$context.responseLength\",\"errorMessage\":\"$context.error.message\",\"format\":\"SLS_HTTP_API_LOG\",\"version\":\"1.0.0\"}"
         }
@@ -596,7 +1133,55 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionDmvOdLs9ya3ifXSYqol7af19rwcNygneIUZ2bO0tA"
+        "versionLogicalId": "ApiLambdaVersionUFC4CuIzsQwpGI0a6hbne5ytdGxNtmXSQSuh6xQG7A"
+      },
+      "get_messages": {
+        "handler": "handler.get_messages",
+        "events": [
+          {
+            "http": {
+              "path": "{chat_id}",
+              "method": "get",
+              "request": {
+                "parameters": {
+                  "method.request.path.chat_id": true
+                }
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "aws-python-flask-dynamodb-api-project-dev-get_messages",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "python3.9",
+        "vpc": {},
+        "versionLogicalId": "GetUnderscoremessagesLambdaVersionPR4HObQegDDuv2VMIN3m7oybJhZs8iSKseOs1ZAI0Q"
+      },
+      "send_message": {
+        "handler": "handler.send_message",
+        "events": [
+          {
+            "http": {
+              "path": "{chat_id}",
+              "method": "post",
+              "request": {
+                "parameters": {
+                  "method.request.path.chat_id": true
+                }
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "aws-python-flask-dynamodb-api-project-dev-send_message",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "python3.9",
+        "vpc": {},
+        "versionLogicalId": "SendUnderscoremessageLambdaVersion0ns7be7btHwFrQLjbFFyhlZyRrxDsOQHV0tf8gXwU"
       }
     },
     "resources": {
@@ -621,6 +1206,33 @@
               "WriteCapacityUnits": 1
             },
             "TableName": "anuncios-table-dev"
+          }
+        },
+        "DynamoChatsMessagesTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "simple-chat-messages",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "chat_id",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "ts",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "chat_id",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "ts",
+                "KeyType": "RANGE"
+              }
+            ],
+            "BillingMode": "PAY_PER_REQUEST"
           }
         }
       },
@@ -659,7 +1271,7 @@
     "artifact": "/home/vant/Documents/datahack/cloud/proyecto3_cloud/aws-python-flask-dynamodb-api-project/.serverless/aws-python-flask-dynamodb-api-project.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/aws-python-flask-dynamodb-api-project/dev/1712056231662-2024-04-02T11:10:31.662Z",
+    "artifactDirectoryName": "serverless/aws-python-flask-dynamodb-api-project/dev/1712062571050-2024-04-02T12:56:11.050Z",
     "artifact": "aws-python-flask-dynamodb-api-project.zip"
   }
 }

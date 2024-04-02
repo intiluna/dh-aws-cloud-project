@@ -29,14 +29,39 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - Fn::GetAtt: [ AnunciosTable, Arn ]
+            - "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_MESSAGES_TABLE}"
   environment:
     ANUNCIOS_TABLE: ${self:custom.tableName}
+    #viene de simple-chat
+    DYNAMODB_MESSAGES_TABLE: simple-chat-messages
+
+        
 
 functions:
   api:
     handler: wsgi_handler.handler
     events:
       - httpApi: '*'
+  get_messages:
+    handler: handler.get_messages
+    events:
+      - http:
+          path: /{chat_id}
+          method: get
+          request:
+            parameters:
+              paths:
+                chat_id: true
+  send_message:
+    handler: handler.send_message
+    events:
+      - http:
+          path: /{chat_id}
+          method: post
+          request:
+            parameters:
+              paths:
+                chat_id: true
 
 plugins:
   - serverless-wsgi
@@ -58,5 +83,20 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.tableName}
+    DynamoChatsMessagesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_MESSAGES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: chat_id
+            AttributeType: S
+          - AttributeName: ts
+            AttributeType: S
+        KeySchema:
+          - AttributeName: chat_id
+            KeyType: HASH
+          - AttributeName: ts
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
 
 

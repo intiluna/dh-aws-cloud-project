@@ -1,7 +1,10 @@
 import os
 import boto3
 # import requests
+from datetime import datetime, timezone
 from flask import Flask, jsonify, make_response, request, render_template
+from boto3.dynamodb.conditions import Key
+
 
 app = Flask(__name__)
 
@@ -62,7 +65,7 @@ def delete_anuncio(anuncio_id):
         TableName=ANUNCIOS_TABLE, Key={'anuncioId': {'S': anuncio_id}}
     )
 
-    return jsonify({f'message': 'Anuncio {anuncio_id} eliminado exitosamente'}), 200   
+    return jsonify({'message': 'Anuncio eliminado exitosamente'}), 200   
 
 # Crear nuevo anuncio
 @app.route('/anuncio-nuevo', methods=['POST'])
@@ -106,6 +109,73 @@ def get_list_anuncios():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# intentamos integrar funciones del chat
+# Instancia de la tabla de mensajes
+# messages_table = boto3.resource('dynamodb').Table(os.environ.get('DYNAMODB_MESSAGES_TABLE'))
+
+# # Función para obtener los mensajes de un chat
+# def get_messages(chat_id):
+#     """Return the messages published in the chat room
+
+#     :param chat_id: ID of the chat
+#     :type chat_id: str
+
+#     :rtype: dict
+#         return example:
+#         {
+#             "messages": [
+#                 {   "ts": "timestamp",   "user_id"": "author1",   "text": "text message"   },
+#                 ...
+#             ]
+#         }
+#     """
+#     messages = messages_table.query(KeyConditionExpression=Key('chat_id').eq(chat_id))
+#     if "Items" in messages:
+#         return {'status': 200, 'messages': [{'ts': x['ts'], 'user_id': x['user_id'], 'text': x['text']} for x in messages["Items"]]}
+#     else:
+#         return {'status': 404, 'title': 'Chat not found', 'detail': f'Chat {chat_id} not found in database'}
+
+# # Función para enviar un mensaje a un chat
+# def send_message(chat_id, message):
+#     """Send a message into a chat room
+
+#     :param chat_id: ID of the chat
+#     :type chat_id: str
+#     :param message: new info
+#     :type message: dict
+#         message example:
+#         {
+#             "user_id": "user ID of the author",
+#             "text": "content written by the user",
+#         }
+
+#     :rtype: SimpleResponse
+#     """
+#     messages_table.put_item(
+#         Item={
+#             'chat_id': chat_id,
+#             'ts': datetime.now().replace(tzinfo=timezone.utc).isoformat(),
+#             'user_id': message['user_id'],
+#             'text': message['text'],
+#         }
+#     )
+#     return {'status': 201, 'title': 'OK', 'detail': f'New message posted into chat {chat_id}'}
+
+# # Endpoint para obtener los mensajes de un chat específico
+# @app.route('/chat/<string:chat_id>', methods=['GET'])
+# def get_chat_messages(chat_id):
+#     result = get_messages(chat_id)
+#     return jsonify(result)
+
+# # Endpoint para enviar un mensaje a un chat específico
+# @app.route('/chat/<string:chat_id>', methods=['POST'])
+# def post_chat_message(chat_id):
+#     message = request.json
+#     result = send_message(chat_id, message)
+#     return jsonify(result)
+
 
 
 @app.errorhandler(404)
