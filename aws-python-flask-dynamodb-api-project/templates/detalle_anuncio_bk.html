@@ -19,18 +19,18 @@
         #simple-chat-messages {
             border: 1px solid #ccc;
             border-radius: 5px;
-            padding: 20px;
-            height: 200px; /* Altura máxima para el chat */
+            padding: 10px;
+            height: 300px; /* Altura máxima para el chat */
             overflow-y: auto; /* Habilitar desplazamiento vertical */
         }
 
         #newMessage {
-            width: calc(100% - 200px); /* Ajustar el ancho para que quepa el botón */
+            width: calc(100% - 80px); /* Ajustar el ancho para que quepa el botón */
             margin-right: 10px;
         }
 
         button {
-            width: 100px; /* Ancho fijo para el botón */
+            width: 70px; /* Ancho fijo para el botón */
         }
     </style>
 </head>
@@ -50,6 +50,16 @@
     <!-- Espacio para mensaje -->
     <div id="mensaje"></div>
 
+    <!-- Espacio para mensajes del chat -->
+    <div id="simple-chat-messages"></div>
+
+    <!-- Formulario para escribir un nuevo mensaje -->
+    <div>
+        <input type="text" id="newMessage" placeholder="Escribe un nuevo mensaje...">
+        <button onclick="enviarMensaje()">Enviar</button>
+    </div>
+    
+
     <!-- Botones -->
     <div>
         <a href="/anuncios"><button class="button">Ver anuncios</button></a>
@@ -57,20 +67,6 @@
         <button onclick="eliminarAnuncio('{{ libro.anuncioId }}')" class="button button-delete">Eliminar anuncio</button>
     </div>
 
-    <div class="container">
-        
-
-        <!-- Espacio para mensajes del chat -->
-        <div class="chat">
-            <h3>Mensajes del chat</h3>
-            <div id="simple-chat-messages"></div>
-            <!-- Formulario para escribir un nuevo mensaje -->
-            <div>
-                <input type="text" id="newMessage" placeholder="Escribe un nuevo mensaje...">
-                <button onclick="enviarMensaje()">Enviar</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Footer -->
     <footer>
@@ -78,29 +74,6 @@
     </footer>
 
     <script>
-        // Función para cargar los mensajes del chat
-        function cargarMensajes() {
-            fetch(`/chat/{{ libro.anuncioId }}`, {
-                method: 'GET'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 200) {
-                    const messagesDiv = document.getElementById('simple-chat-messages');
-                    messagesDiv.innerHTML = ''; // Limpiar los mensajes anteriores
-                    data.messages.forEach(message => {
-                        const messageElement = document.createElement('div');
-                        messageElement.innerText = `[${message.ts}] ${message.user_id}: ${message.text}`;
-                        messagesDiv.appendChild(messageElement);
-                    });
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        // Llamar a la función para cargar los mensajes cuando se carga la página
-        cargarMensajes();
-
         function eliminarAnuncio(anuncioId) {
             fetch(`/anuncios/${anuncioId}`, {
                 method: 'DELETE',
@@ -128,6 +101,55 @@
                 // Manejar errores si la solicitud falla
             });
         }
+        // Función para cargar los mensajes del chat
+        function cargarMensajes() {
+            fetch(`/chat/{{ libro.anuncioId }}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 200) {
+                    const messagesDiv = document.getElementById('simple-chat-messages');
+                    messagesDiv.innerHTML = ''; // Limpiar los mensajes anteriores
+                    data.messages.forEach(message => {    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chat {
+            flex: 1;
+            margin-left: 20px;
+        }
+
+        #simple-chat-messages {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            height: 300px; /* Altura máxima para el chat */
+            overflow-y: auto; /* Habilitar desplazamiento vertical */
+        }
+
+        #newMessage {
+            width: calc(100% - 80px); /* Ajustar el ancho para que quepa el botón */
+            margin-right: 10px;
+        }
+
+        button {
+            width: 70px; /* Ancho fijo para el botón */
+        }
+    </style>
+                        const messageElement = document.createElement('div');
+                        messageElement.innerText = `[${message.ts}] ${message.user_id}: ${message.text}`;
+                        messagesDiv.appendChild(messageElement);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Llamar a la función para cargar los mensajes cuando se carga la página
+        cargarMensajes();
 
         function enviarMensaje() {
             const newMessage = document.getElementById('newMessage').value;
@@ -152,6 +174,7 @@
             })
             .catch(error => console.error('Error:', error));
         }
+        
     </script>
 
 </body>
