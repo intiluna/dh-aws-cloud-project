@@ -253,7 +253,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712068191330-2024-04-02T14:29:51.330Z/aws-python-flask-dynamodb-api-project.zip"
+                "S3Key": "serverless/aws-python-flask-dynamodb-api-project/dev/1712582084677-2024-04-08T13:14:44.677Z/aws-python-flask-dynamodb-api-project.zip"
               },
               "Handler": "wsgi_handler.handler",
               "Runtime": "python3.9",
@@ -277,14 +277,14 @@
               "ApiLogGroup"
             ]
           },
-          "ApiLambdaVersionTrW18dJszSkRpRoZs18ZxOewFFhhySnXXzscGYeGo": {
+          "ApiLambdaVersionaysXupBmNva9EFWqaGxT64Fqal5WA9w0jTWzKKwTw": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ApiLambdaFunction"
               },
-              "CodeSha256": "AMlpS9PpH27S6RV3RTNDRNDiGb3R2dHUHEYZLUQcMh4="
+              "CodeSha256": "V75bJBarn+YtOE5U/hReBk4VoAThOoLoP25QfVHeVIo="
             }
           },
           "HttpApi": {
@@ -468,7 +468,7 @@
           "ApiLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ApiLambdaVersionTrW18dJszSkRpRoZs18ZxOewFFhhySnXXzscGYeGo"
+              "Ref": "ApiLambdaVersionaysXupBmNva9EFWqaGxT64Fqal5WA9w0jTWzKKwTw"
             },
             "Export": {
               "Name": "sls-aws-python-flask-dynamodb-api-project-dev-ApiLambdaFunctionQualifiedArn"
@@ -626,7 +626,7 @@
         "timeout": 6,
         "runtime": "python3.9",
         "vpc": {},
-        "versionLogicalId": "ApiLambdaVersionTrW18dJszSkRpRoZs18ZxOewFFhhySnXXzscGYeGo"
+        "versionLogicalId": "ApiLambdaVersionaysXupBmNva9EFWqaGxT64Fqal5WA9w0jTWzKKwTw"
       }
     },
     "resources": {
@@ -716,7 +716,7 @@
     "artifact": "/home/vant/Documents/datahack/cloud/proyecto3_cloud/aws-python-flask-dynamodb-api-project/.serverless/aws-python-flask-dynamodb-api-project.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/aws-python-flask-dynamodb-api-project/dev/1712068191330-2024-04-02T14:29:51.330Z",
+    "artifactDirectoryName": "serverless/aws-python-flask-dynamodb-api-project/dev/1712582084677-2024-04-08T13:14:44.677Z",
     "artifact": "aws-python-flask-dynamodb-api-project.zip"
   }
 }

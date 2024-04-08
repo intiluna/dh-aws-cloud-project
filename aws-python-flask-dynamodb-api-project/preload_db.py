@@ -32,3 +32,5 @@ def upload_record_to_dynamodb(name, userId):
 if __name__ == "__main__":
     csv_file = "records_to_populate_db.csv"  # Path to your CSV file
     upload_records_from_csv(csv_file)
+
+#python preload_db.py "$( sls info --verbose | grep HttpApiUrl | awk '{print $2}')"
